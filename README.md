@@ -13,9 +13,8 @@ include("ElecGas.jl")
 ## :triangular_flag_on_post: The problem
 Transform a constraint of the form
 
-$$
-    f |f| = p_1^2 - p_2^2
-$$
+$$f |f| = p_1^2 - p_2^2$$
+
 to a linear on/off constraint.
 
 ## :bulb: A possible solution
@@ -25,65 +24,54 @@ Use a combination of
 
 ## :beginner: A simple example
 Minimize the linear function
-$$
-C^e \cdot e + C^g \cdot g
-$$
+
+$$C^e \cdot e + C^g \cdot g$$
+
 over a set of constraints containing
 
-$$
-    \boxed{\quad f |f| = p_1^2 - p_2^2 \quad} 
-$$
+$$\boxed{\quad f |f| = p_1^2 - p_2^2 \quad}$$
 
-$$
-    2f = f^I+f^O
-$$
+$$2f = f^I+f^O$$
 
-$$
-    1\cdot g - \delta \cdot e - f^I + f^O = D^g
-$$
+$$1\cdot g - \delta \cdot e - f^I + f^O = D^g$$
 
-$$
-    \ell = \gamma (p_1 + p_2)/2 = \ell_0 + f^I - f^O
-$$
+$$\ell = \gamma (p_1 + p_2)/2 = \ell_0 + f^I - f^O$$
 
-$$
-     1\cdot e - h = D^e
-$$
+$$1\cdot e - h = D^e$$
 
-$$
-    p_2 \leq \Gamma p_1 \quad 1\cdot ------ \cdot  2
-$$
+$$p_2 \leq \Gamma p_1$$ 
+
+$$1\cdot ------ \cdot  2$$
 
 ## :feet: Change of variable
-$$
-    f |f| = p_1^2 - p_2^2 = (p_1 - p_2)(p_1 + p_2)
-$$
+$$f |f| = p_1^2 - p_2^2 = (p_1 - p_2)(p_1 + p_2)$$
+
 $$u:=p_1 - p_2 \quad\quad v:=p_1 + p_2$$
-$f \geq 0 \iff u\geq 0\quad$ in this case $\quad f = \sqrt{uv}$
+
+$$f \geq 0 \iff u\geq 0\quad\mbox{ : in this case } \quad f = \sqrt{uv}$$
 
 ## :feet: Approximation
 
 Use Julia package [PiecewiseAffineApprox.jl](https://github.com/sintefore/PiecewiseAffineApprox.jl) to approximate the function
-$$
-    F(u,v) = \sqrt{uv}
-$$
+
+$$F(u,v) = \sqrt{uv}$$
+
 in a suitable domain. 
 
 ## :feet: Reformulation
 
-$$
-    f = f^+ - f^-
-$$
+Decompose the variable $f$ into its positive and negative part
 
-$$
-    u\geq 0 \iff f^+ = F(u,v) = \sqrt{uv}.
-$$
+$$f = f^+ - f^-$$
 
-$$
-    u\leq 0 \iff f^- = F(-u,v) = \sqrt{-uv}
-$$
-One can use 
+Use 
 [JuMP Indicator Constraints](https://jump.dev/JuMP.jl/stable/manual/constraints#Indicator-constraints)
+to formulate the following
+
+$$u\geq 0 \iff f^+ = F(u,v) = \sqrt{uv}$$
+
+$$u\leq 0 \iff f^- = F(-u,v) = \sqrt{-uv}$$
+
 
 ## :feet: Implementation in Julia
 
